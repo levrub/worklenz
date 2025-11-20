@@ -50,26 +50,17 @@ app.use((_req: Request, res: Response, next: NextFunction) => {
   next();
 });
 
-// CORS configuration
-const allowedOrigins = [
-  isProduction() 
-    ? [
-        `http://localhost:5000`,
-        `http://127.0.0.1:5000`,
-        process.env.SERVER_CORS || "",  // Add hostname from env
-        process.env.FRONTEND_URL || ""  // Support FRONTEND_URL as well
-      ].filter(Boolean)  // Remove empty strings
-    : [
-        "http://localhost:3000",
-        "http://localhost:5173",
-        "http://127.0.0.1:5173",
-        "http://127.0.0.1:3000",
-        "http://127.0.0.1:5000",
-        `http://localhost:5000`,
-        process.env.SERVER_CORS || "",  // Add hostname from env
-        process.env.FRONTEND_URL || ""  // Support FRONTEND_URL as well
-      ].filter(Boolean)  // Remove empty strings
-].flat();
+// CORS configuration - simplified
+const allowedOrigins = process.env.NODE_ENV === 'production'
+  ? (process.env.SERVER_CORS || "").split(',').filter(Boolean)
+  : [
+      "http://localhost:3000",
+      "http://localhost:5173",
+      "http://127.0.0.1:5173",
+      "http://127.0.0.1:3000",
+      "http://127.0.0.1:5000",
+      "http://localhost:5000"
+    ];
 
 app.use(cors({
   origin: (origin, callback) => {
