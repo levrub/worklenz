@@ -9,8 +9,6 @@ services:
     depends_on:
       - backend
     restart: unless-stopped
-    env_file:
-      - ./worklenz-frontend/.env.production
     networks:
       - worklenz
 
@@ -27,8 +25,6 @@ services:
       minio:
         condition: service_started
     restart: unless-stopped
-    env_file:
-      - ./worklenz-backend/.env
     networks:
       - worklenz
 
